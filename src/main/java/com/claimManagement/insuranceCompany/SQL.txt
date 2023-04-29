@@ -1,0 +1,8 @@
+INSERT INTO policy (policy_no, date_of_insurance, email_id, insured_first_name, insured_last_name, status, vehicle_no)
+VALUES ('POL001', '2022-01-01', 'john.doe@example.com', 'John', 'Doe', 1, 'ABC123');
+
+INSERT INTO surveyor (surveyor_id, estimate_limit, first_name, last_name)
+VALUES (1, 10000, 'Jane', 'Smith');
+
+INSERT INTO claim_details (claim_id, amt_approved_by_surveyor, claim_status, date_of_accident, estimated_loss, insurance_company_approval, surveyorfees, withdraw_claim, policy_no, surveyor_id)
+VALUES ('CLAIM001', 5000, 1, '2022-02-01', 8000, 1, 1000, 0, 'POL001', 1);
