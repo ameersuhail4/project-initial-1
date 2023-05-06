@@ -25,11 +25,13 @@ public class PolicyDAOImp implements PolicyDAO {
 
     //inserting into policy
     @Override
-    public String addPolicy(PolicyDTO policyDTO) {
+    public Policy addPolicy(PolicyDTO policyDTO) {
+        System.out.println("dto"+policyDTO.hashCode());
         Policy policyEntity=toEntity(policyDTO);
+        System.out.println("entity"+policyEntity.hashCode());
         policyEntity.setPolicyNo(generatePolicyNo(policyEntity));
-        policyRepository.save(policyEntity);
-        return "added";
+        System.out.println( policyRepository.save(policyEntity).hashCode());
+        return policyRepository.save(policyEntity);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class PolicyDAOImp implements PolicyDAO {
 
 	@Override
 	public String AddPolicyByHardCode() {
-		Policy p=new Policy( "Shaik", "Ameer",LocalDate.of(2022,1,1),"ameersuhail@gmail.com", "ABC123",true);
+		Policy p=new Policy("1234", "Shaik", "Ameer",LocalDate.of(2022,1,1),"ameersuhail@gmail.com", "ABC123",true);
 		p.setPolicyNo(generatePolicyNo(p));
 		policyRepository.save(p);
 		return "data hard coded to policy database";

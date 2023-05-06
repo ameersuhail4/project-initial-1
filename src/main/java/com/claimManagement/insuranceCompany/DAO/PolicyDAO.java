@@ -9,7 +9,7 @@ import java.util.List;
 public interface PolicyDAO {
 
 
-	String addPolicy(PolicyDTO p);
+	Policy addPolicy(PolicyDTO p);
 
     PolicyDTO getById(String policyNo) throws CustomException;
 

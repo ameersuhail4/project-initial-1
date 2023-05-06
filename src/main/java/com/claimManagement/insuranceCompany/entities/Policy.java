@@ -7,6 +7,7 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Policy {
@@ -42,14 +43,14 @@ public class Policy {
     public Policy() {
     }
 
-    public Policy(
+    public Policy(String policyNo,
                   String insuredFirstName,
                   String insuredLastName,
                   LocalDate dateOfInsurance,
                   String emailId,
                   String vehicleNo,
                   boolean status) {
-
+        this.policyNo=policyNo;
         this.insuredFirstName = insuredFirstName;
         this.insuredLastName = insuredLastName;
         this.dateOfInsurance = dateOfInsurance;
@@ -126,4 +127,19 @@ public class Policy {
                 ", status=" + status +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Policy policy = (Policy) o;
+        return status == policy.status &&
+                Objects.equals(policyNo, policy.policyNo)
+                && Objects.equals(insuredFirstName, policy.insuredFirstName)
+                && Objects.equals(insuredLastName, policy.insuredLastName)
+                && Objects.equals(dateOfInsurance, policy.dateOfInsurance)
+                && Objects.equals(emailId, policy.emailId)
+                && Objects.equals(vehicleNo, policy.vehicleNo);
+    }
+
 }

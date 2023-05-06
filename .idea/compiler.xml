@@ -10,12 +10,12 @@
         <module name="ClaimService" />
         <module name="SurveyorService" />
         <module name="serviceRegistry" />
+        <module name="insuranceCompany" />
         <module name="PolicyService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="insuranceComapny" target="1.8" />
-      <module name="insuranceCompany" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

@@ -10,7 +10,7 @@ import java.util.List;
 public interface SurveyorDAO {
 
 
-    String addSurveyor(SurveyorDTO surveyorDTO);
+    Surveyor addSurveyor(SurveyorDTO surveyorDTO);
     List<SurveyorDTO> listOfSurveyors();
     SurveyorDTO getSurveyorByEstimateLimit(int estimatelimit) throws CustomException;
     SurveyorDTO getSurveyorById(int id);

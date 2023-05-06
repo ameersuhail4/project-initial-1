@@ -6,6 +6,7 @@ import com.claimManagement.insuranceCompany.DTO.SurveyorDTO;
 import com.claimManagement.insuranceCompany.daoImp.ClaimDAOImp;
 import com.claimManagement.insuranceCompany.daoImp.PolicyDAOImp;
 import com.claimManagement.insuranceCompany.daoImp.SurveyorDAOImp;
+import com.claimManagement.insuranceCompany.entities.ClaimDetails;
 import com.claimManagement.insuranceCompany.exceptions.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,11 +53,14 @@ public class ClaimController {
 
         policyDTO=policyDAOImp.getById(claimDetailsDTO.getPolicyNo());
         System.out.println("test"+policyDTO);
+
         int estimateLimit=claimDetailsDTO.getEstimatedLoss();
+
         surveyorDTO= surveyorDAOImp.getSurveyorByEstimateLimit(estimateLimit);
         claimDetailsDTO.setSurveyorId(surveyorDTO.getSurveyorId());
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(claimDAOImp.AddNewClaim(claimDetailsDTO));
+        ClaimDetails claimDetailsid=claimDAOImp.AddNewClaim(claimDetailsDTO);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("added policy with id: "+claimDetailsid);
     }
 
     @PutMapping("/api/claims/{claimId}/update")

@@ -37,7 +37,7 @@ public class PolicyController {
 	@PostMapping("/api/policies/new")
 	public String add(@RequestBody PolicyDTO po)
 	{
-		policyDAOImp.addPolicy(po);
-		return "policy added with id:"+po.getPolicyNo();
+		Policy policy=policyDAOImp.addPolicy(po);
+		return "policy added with id:"+policy.getPolicyNo();
 	}
 }

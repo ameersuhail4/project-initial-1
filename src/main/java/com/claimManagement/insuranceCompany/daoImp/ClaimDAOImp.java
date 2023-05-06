@@ -2,9 +2,12 @@ package com.claimManagement.insuranceCompany.daoImp;
 
 import com.claimManagement.insuranceCompany.DAO.ClaimDAO;
 import com.claimManagement.insuranceCompany.DTO.ClaimDetailsDTO;
+import com.claimManagement.insuranceCompany.DTO.PolicyDTO;
+import com.claimManagement.insuranceCompany.DTO.SurveyorDTO;
 import com.claimManagement.insuranceCompany.entities.ClaimDetails;
 import com.claimManagement.insuranceCompany.entities.Policy;
 import com.claimManagement.insuranceCompany.entities.Surveyor;
+import com.claimManagement.insuranceCompany.exceptions.CustomException;
 import com.claimManagement.insuranceCompany.repositories.ClaimRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,11 @@ public class ClaimDAOImp implements ClaimDAO {
     @Autowired
     ClaimRepository claimRepository;
 
+    @Autowired
+    PolicyDAOImp policyDAOImp;
+
+    @Autowired
+    SurveyorDAOImp surveyorDAOImp;
     static   String generateClaimId(ClaimDetailsDTO claimDetails)
     {
 
@@ -39,13 +47,13 @@ public class ClaimDAOImp implements ClaimDAO {
     }
 
     @Override
-    public String AddNewClaim(ClaimDetailsDTO claimDetailsDTO) {
-        claimDetailsDTO.setClaimStatus("opened");
+    public ClaimDetails AddNewClaim(ClaimDetailsDTO claimDetailsDTO) throws CustomException {
 
+        claimDetailsDTO.setClaimStatus("opened");
         String claimId=generateClaimId(claimDetailsDTO);
         if(claimRepository.existsClaimDetailsByClaimId(claimId))
         {
-            return "already exist claim with status: "+claimDetailsDTO.getClaimStatus();
+            throw new CustomException( "already exist claim with status: "+claimDetailsDTO.getClaimStatus());
         }
         if(claimDetailsDTO.getEstimatedLoss()>=5000 && claimDetailsDTO.getEstimatedLoss()<10000)
         {
@@ -59,18 +67,31 @@ public class ClaimDAOImp implements ClaimDAO {
         {
             claimDetailsDTO.setSurveyorfees(7000);
         }
+
+
         ClaimDetails claimDetails=toEntity(claimDetailsDTO);
         claimDetails.setClaimId(claimId);
         claimDetails.setClaimStatus("open");
-        ClaimDetails claimDetails1=claimRepository.save(claimDetails);
-        return "added: "+claimDetails1.getClaimId();
+
+        System.out.println(claimDetails.hashCode());
+        ClaimDetails claimDetails1=null;
+        try {
+             claimDetails1=claimRepository.save(claimDetails);
+        }
+        catch (RuntimeException e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        return  claimDetails1;
+
     }
 
 
     @Override
-    public String UpdateByClaimID(String claimId,ClaimDetailsDTO claimDetailsDTO) {
-        claimRepository.findByClaimId(claimId);
-        return "updated";
+    public ClaimDetails UpdateByClaimID(String claimId,ClaimDetailsDTO claimDetailsDTO) {
+        return claimRepository.findByClaimId(claimId);
+
     }
 
     @Override

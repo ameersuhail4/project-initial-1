@@ -53,10 +53,9 @@ public class SurveyorDAOImp implements SurveyorDAO {
     }
 
     @Override
-    public String addSurveyor(SurveyorDTO surveyorDTO) {
+    public Surveyor addSurveyor(SurveyorDTO surveyorDTO) {
         Surveyor surveyor=toEntity(surveyorDTO);
-        surveyorRepository.save(surveyor);
-        return "added succesfully";
+        return surveyorRepository.save(surveyor);
     }
 
 	@Override
