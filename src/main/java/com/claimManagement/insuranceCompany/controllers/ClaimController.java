@@ -1,72 +1,66 @@
 package com.claimManagement.insuranceCompany.controllers;
 
 import com.claimManagement.insuranceCompany.DTO.ClaimDetailsDTO;
-import com.claimManagement.insuranceCompany.DTO.PolicyDTO;
-import com.claimManagement.insuranceCompany.DTO.SurveyorDTO;
-import com.claimManagement.insuranceCompany.daoImp.ClaimDAOImp;
-import com.claimManagement.insuranceCompany.daoImp.PolicyDAOImp;
-import com.claimManagement.insuranceCompany.daoImp.SurveyorDAOImp;
+import com.claimManagement.insuranceCompany.serviceImp.ClaimServiceImp;
+import com.claimManagement.insuranceCompany.serviceImp.PolicyServiceImp;
+import com.claimManagement.insuranceCompany.serviceImp.SurveyorServiceImp;
 import com.claimManagement.insuranceCompany.entities.ClaimDetails;
 import com.claimManagement.insuranceCompany.exceptions.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-public class ClaimController {
+public class ClaimController implements ErrorController{
 
     @Autowired
-    ClaimDAOImp claimDAOImp;
+    ClaimServiceImp claimServiceImp;
     @Autowired
-    PolicyDAOImp policyDAOImp;
+    PolicyServiceImp policyServiceImp;
     @Autowired
-    SurveyorDAOImp surveyorDAOImp;
+    SurveyorServiceImp surveyorServiceImp;
 
+
+
+    //API to retrieve all claims
     @GetMapping("/api/claims")
-    List<ClaimDetailsDTO> getClaims() throws CustomException
+    ResponseEntity<List<ClaimDetailsDTO>> getClaims() throws CustomException
     {
-    	List<ClaimDetailsDTO> claimList=claimDAOImp.getClaims();
-    	if(claimList.size()==0)
-    	{
-    		throw new CustomException("No Claims exist");
-    	}
-        return claimList;
+    	List<ClaimDetailsDTO> claimList= claimServiceImp.getClaims();
+        return ResponseEntity.status(HttpStatus.OK).body(claimList);
     }
 
-    @GetMapping("/api/claims/{id}")
-    ClaimDetailsDTO getClaim(@PathVariable String id)
-    {
-        return claimDAOImp.getClaimById((id));
+    //API to retrieve claim by id.
+    @GetMapping("/api/claims/id/{id}")
+    ResponseEntity<ClaimDetailsDTO> getClaim(@PathVariable String id) throws CustomException {
+        return ResponseEntity.status(HttpStatus.OK).body(claimServiceImp.getClaimById((id)));
     }
 
+    //API to post new claim.
     @PostMapping("/api/claims/new")
-
-    ResponseEntity addNewClaim(@RequestBody ClaimDetailsDTO claimDetailsDTO) throws CustomException {
-//        if (claimDetails == null) {
-//            throw new IllegalArgumentException("Request body cannot be null");
-//        }
-        PolicyDTO policyDTO;
-        SurveyorDTO surveyorDTO;
-
-        policyDTO=policyDAOImp.getById(claimDetailsDTO.getPolicyNo());
-        System.out.println("test"+policyDTO);
-
-        int estimateLimit=claimDetailsDTO.getEstimatedLoss();
-
-        surveyorDTO= surveyorDAOImp.getSurveyorByEstimateLimit(estimateLimit);
-        claimDetailsDTO.setSurveyorId(surveyorDTO.getSurveyorId());
-
-        ClaimDetails claimDetailsid=claimDAOImp.AddNewClaim(claimDetailsDTO);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("added policy with id: "+claimDetailsid);
+    ResponseEntity<String> addNewClaim(@RequestBody ClaimDetailsDTO claimDetailsDTO) throws CustomException {
+        System.out.println("body req:"+claimDetailsDTO);
+        ClaimDetails claimDetailsid= claimServiceImp.AddNewClaim(claimDetailsDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    //API to update Claim by id
     @PutMapping("/api/claims/{claimId}/update")
-    String updateClaimById(@PathVariable String claimId,@RequestBody ClaimDetailsDTO claimDetailsDTO)
-    {
-        claimDAOImp.UpdateByClaimID(claimId,claimDetailsDTO);
-        return "updated claim";
+    ResponseEntity<String> updateClaimById(@PathVariable String claimId,@RequestBody ClaimDetailsDTO claimDetailsDTO) throws CustomException {
+        System.out.println("res:"+claimDetailsDTO);
+        ClaimDetails claimDetails=claimServiceImp.UpdateByClaimID(claimId,claimDetailsDTO);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
+    @RequestMapping("/error")
+    public ResponseEntity<String> handleError() {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Custom 404 Not Found Response");
+    }
+
+
+
+
 }

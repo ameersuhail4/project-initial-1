@@ -1,12 +1,10 @@
-package com.claimManagement.insuranceCompany.daoImp;
+package com.claimManagement.insuranceCompany.serviceImp;
 
-import com.claimManagement.insuranceCompany.DAO.SurveyorDAO;
-import com.claimManagement.insuranceCompany.DTO.SurveyorDTO;
-import com.claimManagement.insuranceCompany.DAO.SurveyorDAO;
-import com.claimManagement.insuranceCompany.entities.Surveyor;
 import com.claimManagement.insuranceCompany.exceptions.CustomException;
+import com.claimManagement.insuranceCompany.service.SurveyorService;
+import com.claimManagement.insuranceCompany.DTO.SurveyorDTO;
+import com.claimManagement.insuranceCompany.entities.Surveyor;
 import com.claimManagement.insuranceCompany.repositories.SurveyorRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,44 +12,48 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class SurveyorDAOImp implements SurveyorDAO {
+public class SurveyorServiceImp implements SurveyorService {
 
+    //Injecting repository.
     @Autowired
     private SurveyorRepository surveyorRepository;
 
+    //Retrieve list of Surveyors.
     @Override
-    public List<SurveyorDTO> listOfSurveyors() {
+    public List<SurveyorDTO> listOfSurveyors() throws CustomException {
         List<Surveyor> surveyors=surveyorRepository.findAll();
+        if (surveyors.isEmpty())
+        {
+            throw new CustomException("No surveyors exist!");
+        }
         List<SurveyorDTO> surveyorDTOS=surveyors.stream().map((x)->toDto(x)).collect(Collectors.toList());
         return surveyorDTOS;
     }
 
+    //Retrieve Surveyor by EstimateLimit
     @Override
     public SurveyorDTO getSurveyorByEstimateLimit(int estimatelimit) throws CustomException {
-        if (estimatelimit!=0)
+        Surveyor surveyor=surveyorRepository.findByEstimateLimit(estimatelimit);
+        if (surveyor==null)
         {
-            if(surveyorRepository.existsSurveyorByEstimateLimit(estimatelimit))
-            {
-                Surveyor surveyor=surveyorRepository.findByEstimateLimit(estimatelimit);
-                return toDto(surveyor);
-            }
-            else
-            {
-                throw  new CustomException("No Surveyor found for estimateLoss:"+estimatelimit);
-            }
-
-        }else {
-            throw  new CustomException("estimateLoss should be greater than zero");
+            throw new CustomException("No Surveyor Exists with estimated Limit: "+estimatelimit);
         }
+        return toDto(surveyor);
 
     }
 
+    //Retrieve surveyor by id.
     @Override
-    public SurveyorDTO getSurveyorById(int id) {
+    public SurveyorDTO getSurveyorById(int id) throws CustomException {
         Surveyor surveyor=surveyorRepository.findSurveyorBySurveyorId(id);
+        if (surveyor==null)
+        {
+            throw new CustomException("No Surveyor Exists with id: "+id);
+        }
         return  toDto(surveyor);
     }
 
+    //adding a new Surveyor.
     @Override
     public Surveyor addSurveyor(SurveyorDTO surveyorDTO) {
         Surveyor surveyor=toEntity(surveyorDTO);
@@ -64,6 +66,8 @@ public class SurveyorDAOImp implements SurveyorDAO {
 		surveyorRepository.save(s);
 		return "hardcoded data into Surveyor database";
 	}
+
+    //Entity to DTO
     public static SurveyorDTO toDto(Surveyor surveyor) {
         SurveyorDTO surveyorDto = new SurveyorDTO();
         surveyorDto.setSurveyorId(surveyor.getSurveyorId());
@@ -73,6 +77,7 @@ public class SurveyorDAOImp implements SurveyorDAO {
         return surveyorDto;
     }
 
+    //DTO to Entity
     public static Surveyor toEntity(SurveyorDTO surveyorDTO) {
         Surveyor surveyor = new Surveyor();
         surveyor.setSurveyorId(surveyorDTO.getSurveyorId());

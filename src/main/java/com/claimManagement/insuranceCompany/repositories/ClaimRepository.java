@@ -5,9 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public interface ClaimRepository extends JpaRepository<ClaimDetails,String> {
 
-    ClaimDetails findByClaimId(String claimId);
+    //ClaimDetails findByClaimId(String claimId);
     Boolean existsClaimDetailsByClaimId(String claimId);
 }

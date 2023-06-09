@@ -1,4 +1,4 @@
-package com.claimManagement.insuranceCompany.DAO;
+package com.claimManagement.insuranceCompany.service;
 
 import com.claimManagement.insuranceCompany.DTO.SurveyorDTO;
 import com.claimManagement.insuranceCompany.entities.Surveyor;
@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public interface SurveyorDAO {
+public interface SurveyorService {
 
 
     Surveyor addSurveyor(SurveyorDTO surveyorDTO);
-    List<SurveyorDTO> listOfSurveyors();
+    List<SurveyorDTO> listOfSurveyors() throws CustomException;
     SurveyorDTO getSurveyorByEstimateLimit(int estimatelimit) throws CustomException;
-    SurveyorDTO getSurveyorById(int id);
+    SurveyorDTO getSurveyorById(int id) throws CustomException;
     String addSurveyorByHardCode(); 
 }

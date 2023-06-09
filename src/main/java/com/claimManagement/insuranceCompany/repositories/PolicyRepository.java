@@ -11,5 +11,5 @@ public interface PolicyRepository extends JpaRepository<Policy,String> {
 	
         Boolean existsPolicyByPolicyNo(String policyNo);
         
-        Policy findByPolicyNo(String policyNo);
+        //Policy findByPolicyNo(String policyNo);
 }

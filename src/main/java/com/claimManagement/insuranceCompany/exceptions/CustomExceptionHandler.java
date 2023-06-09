@@ -1,4 +1,4 @@
-package com.claimManagement.insuranceCompany;
+package com.claimManagement.insuranceCompany.exceptions;
 
 import com.claimManagement.insuranceCompany.exceptions.CustomException;
 
@@ -11,17 +11,25 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
+    //Handles Exception when no body provided while posting data.
     @ExceptionHandler({HttpMessageNotReadableException.class})
     protected ResponseEntity<Object> handleHttpMessageNotReadableException(Exception ex, WebRequest request) {
         String error = "Request body is missing or invalid.";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+    //Handles Exception when invalid API is called.
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupportedException(Exception ex, WebRequest request) {
+        String error = "Requested API is missing or invalid.";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+    @ExceptionHandler(NoHandlerFoundException.class)
+    protected ResponseEntity<Object> handleNoHandlerFoundException(Exception ex, WebRequest request) {
         String error = "Requested API is missing or invalid.";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
@@ -31,8 +39,10 @@ public class CustomExceptionHandler {
 //
 //        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 //    }
+
+    //Handles custom Exception
     @ExceptionHandler({CustomException.class})
-    protected ResponseEntity<Object> handleIdNotExistException(CustomException e)
+    protected ResponseEntity<Object> handlingCustomException(CustomException e)
     {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }

@@ -19,11 +19,11 @@ public class Policy {
 
     @NotNull
 
-    @Size(min = 5,message = "must be minimum 5 characters")
+    @Size(min = 3,message = "must be minimum 3 characters")
     private String insuredFirstName;
 
     @NotNull
-    @Size(min = 5,message = "must be minimum 5 characters")
+    @Size(min = 3,message = "must be minimum 3 characters")
     private String insuredLastName;
 
     @NotNull

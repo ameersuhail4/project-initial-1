@@ -1,22 +1,23 @@
 package com.claimManagement.insuranceCompany;
 
-import com.claimManagement.insuranceCompany.daoImp.PolicyDAOImp;
-import com.claimManagement.insuranceCompany.daoImp.SurveyorDAOImp;
+import com.claimManagement.insuranceCompany.serviceImp.PolicyServiceImp;
+import com.claimManagement.insuranceCompany.serviceImp.SurveyorServiceImp;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 //import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
-//@EnableEurekaClient
+@EnableEurekaClient
 public class InsuranceCompanyApplication implements CommandLineRunner{
 	@Autowired
-	PolicyDAOImp pdaoImp;
+	PolicyServiceImp pdaoImp;
 	@Autowired
-	SurveyorDAOImp sdaoImp;
+	SurveyorServiceImp sdaoImp;
 	public static void main(String[] args) {
 		SpringApplication.run(InsuranceCompanyApplication.class, args);
 		

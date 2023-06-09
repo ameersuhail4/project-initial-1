@@ -7,15 +7,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ClaimService" />
-        <module name="SurveyorService" />
         <module name="serviceRegistry" />
         <module name="insuranceCompany" />
-        <module name="PolicyService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="ClaimService" target="1.8" />
       <module name="insuranceComapny" target="1.8" />
+      <module name="PolicyService" target="1.8" />
+      <module name="SurveyorService" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

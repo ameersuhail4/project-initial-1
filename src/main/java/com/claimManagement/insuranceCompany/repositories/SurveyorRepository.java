@@ -9,8 +9,7 @@ import java.util.List;
 @Service
 public interface SurveyorRepository extends JpaRepository<Surveyor,Long>
 {
-    List<Surveyor> findAllByEstimateLimit (Integer estimateLimit);
-    Surveyor findByEstimateLimit(int estimatelimit);
-    Boolean existsSurveyorByEstimateLimit(int estimateLimit);
-    Surveyor findSurveyorBySurveyorId(int id);
+    Surveyor findByEstimateLimit(int estimateLimit);
+
+    Surveyor findSurveyorBySurveyorId(long surveyorId);
 }

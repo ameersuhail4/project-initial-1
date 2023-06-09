@@ -6,6 +6,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Surveyor {
@@ -75,4 +76,13 @@ public class Surveyor {
                 ", estimateLimit=" + estimateLimit +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Surveyor surveyor = (Surveyor) o;
+        return surveyorId == surveyor.surveyorId && estimateLimit == surveyor.estimateLimit && Objects.equals(firstName, surveyor.firstName) && Objects.equals(lastName, surveyor.lastName);
+    }
+
 }

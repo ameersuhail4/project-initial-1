@@ -1,43 +1,37 @@
 package com.claimManagement.insuranceCompany.controllers;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 import com.claimManagement.insuranceCompany.DTO.PolicyDTO;
 import com.claimManagement.insuranceCompany.exceptions.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.claimManagement.insuranceCompany.daoImp.PolicyDAOImp;
+import com.claimManagement.insuranceCompany.serviceImp.PolicyServiceImp;
 import com.claimManagement.insuranceCompany.entities.Policy;
-import com.claimManagement.insuranceCompany.repositories.PolicyRepository;
+@CrossOrigin(origins = "http://localhost:4200")
 
 @RestController
 public class PolicyController {
 	
 	@Autowired
-	PolicyDAOImp policyDAOImp;
+	PolicyServiceImp policyServiceImp;
 
 	@GetMapping(value = "/api/policies")
-	public List<PolicyDTO> get() {
+	public List<PolicyDTO> get() throws CustomException {
 
-		return policyDAOImp.getAllPolicies();
+		return policyServiceImp.getAllPolicies();
 	}
-	@GetMapping(value = "/api/policies/{id}")
+	@GetMapping(value = "/api/policies/id/{id}")
 	public PolicyDTO get(@PathVariable String id) throws CustomException {
 
-		return policyDAOImp.getById(id);
+		return policyServiceImp.getById(id);
 	}
 
 	@PostMapping("/api/policies/new")
 	public String add(@RequestBody PolicyDTO po)
 	{
-		Policy policy=policyDAOImp.addPolicy(po);
+		Policy policy= policyServiceImp.addPolicy(po);
 		return "policy added with id:"+policy.getPolicyNo();
 	}
 }

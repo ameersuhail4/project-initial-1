@@ -3,6 +3,7 @@ package com.claimManagement.insuranceCompany.entities;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class ClaimDetails {
@@ -13,6 +14,15 @@ public class ClaimDetails {
     @ManyToOne
     @JoinColumn(name = "policyNo",referencedColumnName = "policyNo")
     private Policy policy;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClaimDetails that = (ClaimDetails) o;
+        return estimatedLoss == that.estimatedLoss && amtApprovedBySurveyor == that.amtApprovedBySurveyor && insuranceCompanyApproval == that.insuranceCompanyApproval && withdrawClaim == that.withdrawClaim && surveyorfees == that.surveyorfees && Objects.equals(claimId, that.claimId) && Objects.equals(policy, that.policy) && Objects.equals(dateOfAccident, that.dateOfAccident) && Objects.equals(claimStatus, that.claimStatus) && Objects.equals(surveyor, that.surveyor);
+    }
+
 
     @Positive
     @NotNull
@@ -155,4 +165,6 @@ public class ClaimDetails {
                 ", surveyorfees=" + surveyorfees +
                 '}';
     }
+
+
 }
